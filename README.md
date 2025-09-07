@@ -1,6 +1,6 @@
 # Project 1: Sums of Consecutive Squares
 
-## � Overview
+## Overview
 This project solves the problem of finding sequences of consecutive squares that sum to a perfect square.  
 The program is implemented in **[Gleam](https://gleam.run/)** using the **Actor Model**, ensuring parallel computation across multiple CPU cores.
 
@@ -67,7 +67,7 @@ Explanation:
 
 ---
 
-## ⚙️ Work Unit Size
+##  Work Unit Size
 
 * **Chosen Work Unit Size:** **1000 subproblems per worker**.
 * **Reasoning:**
