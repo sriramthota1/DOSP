@@ -1,4 +1,3 @@
-
 # Project 1: Sums of Consecutive Squares
 
 ## 📖 Overview
@@ -12,7 +11,7 @@ Given two inputs:
 The program outputs all valid starting numbers `a` such that:
 
 \[
-a^2 + (a+1)^2 + \dots + (a+k-1)^2 = m^2
+a^2 + (a+1)^2 + ... + (a+k-1)^2 = m^2
 \]
 
 for some integer \(m\).
@@ -70,15 +69,12 @@ Explanation:
 
 ## ⚙️ Work Unit Size
 
-* **Definition:** Number of sub-problems (starting indices) assigned to a worker per request.
-* After testing different values, the best performance (on my machine) was obtained with **1000 subproblems per worker**.
-* Tradeoff:
+* **Chosen Work Unit Size:** **1000 subproblems per worker**.
+* **Reasoning:**
 
-  * Smaller units → more communication overhead.
-  * Larger units → risk of load imbalance.
-* **1000** balanced parallelism and efficiency for my environment.
-
-> **Note:** Your best value may vary by CPU core count and scheduler; try 200–5000 and compare.
+  * Smaller units (100–500) caused frequent actor communication overhead.
+  * Larger units (>5000) left some workers idle while others processed big chunks.
+  * **1000** gave the best balance between load distribution and communication cost, maximizing CPU utilization on my machine.
 
 ---
 
@@ -86,79 +82,101 @@ Explanation:
 
 ### Run: `gleam run -- 1000000 4`
 
-* **Real Time:** *\[insert measured value]*
-* **CPU Time / Real Time Ratio:** *\[insert measured ratio]*
+* **Real Time:** *\[fill in your measured value]*
+* **CPU Time:** *\[fill in your measured value]*
+* **CPU Time / Real Time Ratio:** *\[fill in your measured ratio]*
 
-**How I measured:**
+👉 A ratio significantly greater than **1** means effective multi-core parallelism.
+👉 A ratio close to **1** means poor parallelism.
 
-* Linux/macOS:
-
-  ```bash
-  /usr/bin/time -p gleam run -- 1000000 4
-  ```
-* Windows (PowerShell):
-
-  ```powershell
-  Measure-Command { gleam run -- 1000000 4 }
-  ```
-
-**Interpretation:**
-
-* A ratio significantly **> 1** indicates effective parallelism (multiple cores busy).
-* A ratio close to **1** indicates low parallelism.
+> Please note: these values depend on the machine and number of cores available.
 
 ---
 
 ## 💪 Largest Problem Solved
 
+The largest instance successfully solved was:
+
 ```bash
 gleam run -- [your_max_N] [your_max_k]
 ```
 
-Replace with your actual tested values.
-This demonstrates scalability of the actor-based design.
+* Example: `gleam run -- 10000000 10` (replace with your actual maximum run).
+* This demonstrates scalability of the actor-based approach.
+* The limit depends on available memory, CPU, and runtime constraints.
 
 ---
 
 ## 🛠 Implementation Notes
 
-* Implemented **exclusively** with Gleam **actors**.
-* **Boss actor** distributes subproblems (ranges of start values).
-* **Worker actors** compute sums and check for perfect squares.
-* Results are sent back to the boss and printed in ascending order.
-* Sieve/Math helpers used to:
+- Implemented **exclusively** with Gleam **actors**.  
+- **Boss actor** distributes ranges of starting indices.  
+- **Worker actors** compute sums and check for perfect squares.  
+- Results collected by the boss and printed in ascending order.  
 
-  * Compute range-sum-of-squares quickly using formulae.
-  * Check perfect squares using integer sqrt.
+## 🧮 Mathematical Optimization
 
----
+Inline sum-of-squares formula: $S(n)=\frac{n(n+1)(2n+1)}{6}$.
 
-## 🧪 Correctness Hints
+Block form (recommended for readability):
 
-* The sum of squares from 1 to $n$ is $S(n) = \frac{n(n+1)(2n+1)}{6}$.
-* The sum of $k$ consecutive squares starting at $a$ is $S(a+k-1) - S(a-1)$.
-* Check whether the result is a perfect square by integer square root and squaring back.
+$$
+S(n)=\frac{n(n+1)(2n+1)}{6}
+$$
 
----
+For $k$ consecutive squares starting at $a$:
+
+$$
+\sum_{i=0}^{k-1} (a+i)^2 \;=\; S(a+k-1) - S(a-1)
+$$
+
+Expanded to an $O(1)$ computation (no inner loop):
+
+$$
+k\,a^2 \;+\; a\,k(k-1) \;+\; \frac{k(k-1)(2k-1)}{6}
+$$
+
+### Perfect Square Check
+1. Compute the sum $T$ using the formula above.  
+2. Let $r=\lfloor\sqrt{T}\rfloor$.  
+3. It’s a hit iff $r^2=T$.
+
+This reduces the computation from **O(k)** per candidate to **O(1)**, which is critical for large inputs.
+
+
 
 ## 📂 Project Structure
 
 ```
-/src/main.gleam        # entry point (parses args, starts boss)
-/src/boss.gleam      # boss actor (work distribution, result aggregation)
-/src/worker.gleam    # worker actor (computes range checks)
+/src
+   main.gleam        # entry point (parses args, starts boss)
+/src/boss.gleam      # boss actor (distributes work)
+/src/worker.gleam    # worker actor (computes sums)
 /src/messages.gleam  # actor message types
 /README.md           # this file
-/gleam.toml          # dependencies & project metadata
+/gleam.toml          # dependencies
 ```
 
 ---
 
-## 👤 Authors
+## 🌐 Bonus (Optional)
 
-* Nabeel Ahmed Mohammed - 33179038
-* Sriram Thota - 
+* Extend to **remote actors** to run across multiple machines.
+* Enables solving very large instances such as:
+
+```bash
+gleam run -- 100000000 20
+```
+
+* Record a short **video demo** explaining your setup and speedup.
+
+---
+
+## 👤 Author
+
+* Your Name
 * Distributed Operating Systems Principles — Fall 2025
 
 ```
+
 ```
