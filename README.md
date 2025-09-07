@@ -1,6 +1,6 @@
 # Project 1: Sums of Consecutive Squares
 
-## 📖 Overview
+## � Overview
 This project solves the problem of finding sequences of consecutive squares that sum to a perfect square.  
 The program is implemented in **[Gleam](https://gleam.run/)** using the **Actor Model**, ensuring parallel computation across multiple CPU cores.
 
@@ -18,7 +18,7 @@ for some integer \(m\).
 
 ---
 
-## 🚀 Running the Program
+##  Running the Program
 
 ### Build & Run
 ```bash
@@ -78,7 +78,7 @@ Explanation:
 
 ---
 
-## 📊 Performance Results
+## Performance Results
 
 ### Run: `gleam run -- 1000000 4`
 
@@ -86,14 +86,14 @@ Explanation:
 * **CPU Time:** *\[fill in your measured value]*
 * **CPU Time / Real Time Ratio:** *\[fill in your measured ratio]*
 
-👉 A ratio significantly greater than **1** means effective multi-core parallelism.
-👉 A ratio close to **1** means poor parallelism.
+-> A ratio significantly greater than **1** means effective multi-core parallelism.
+-> A ratio close to **1** means poor parallelism.
 
 > Please note: these values depend on the machine and number of cores available.
 
 ---
 
-## 💪 Largest Problem Solved
+##  Largest Problem Solved
 
 The largest instance successfully solved was:
 
@@ -107,14 +107,14 @@ gleam run -- [your_max_N] [your_max_k]
 
 ---
 
-## 🛠 Implementation Notes
+##  Implementation Notes
 
 - Implemented **exclusively** with Gleam **actors**.  
 - **Boss actor** distributes ranges of starting indices.  
 - **Worker actors** compute sums and check for perfect squares.  
 - Results collected by the boss and printed in ascending order.  
 
-## 🧮 Mathematical Optimization
+##  Mathematical Optimization
 
 Inline sum-of-squares formula: $S(n)=\frac{n(n+1)(2n+1)}{6}$.
 
@@ -159,7 +159,7 @@ This reduces the computation from **O(k)** per candidate to **O(1)**, which is c
 
 ---
 
-## 🌐 Bonus (Optional)
+##  Bonus (Optional)
 
 * Extend to **remote actors** to run across multiple machines.
 * Enables solving very large instances such as:
@@ -172,7 +172,7 @@ gleam run -- 100000000 20
 
 ---
 
-## 👤 Author
+##  Author
 
 * Your Name
 * Distributed Operating Systems Principles — Fall 2025
